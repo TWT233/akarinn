@@ -5,14 +5,17 @@
 generated id\*
 
 1. current round
-2. boss (list)
+
+### status boss
+
+1. boss (list)
    1. status
+      1. defeated
+      2. active
+      3. waiting
    2. current_hp
    3. max_hp
    4. challenger?
-3. today info?
-   1. battle count
-   2. battles remain
 
 ## battle log
 
@@ -36,8 +39,7 @@ mem structure
 2. when
 3. status
    1. enter
-   2. tree
-   3. waiting
+   2. waiting
 4. comment
 
 ## member
