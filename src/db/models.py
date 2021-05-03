@@ -20,10 +20,10 @@ class BossStatus(Base):
         ACTIVE = 2
         WATING = 3
 
-    boss_number = Column(Integer, primary_key=True)
-    boss_status = Column(Integer)
-    boss_hp = Column(Integer)
-    boss_maxhp = Column(Integer)
+    number = Column(Integer, primary_key=True)
+    status = Column(Integer)
+    hp = Column(Integer)
+    maxhp = Column(Integer)
 
 
 class BattleLog(Base):
