@@ -71,3 +71,14 @@ class Member(Base):
     permission = Column(Integer)
     contact_khl = Column(String)
     contact_qq = Column(String)
+
+
+class Info(Base):
+    __tablename__ = 'info'
+
+    id = Column(Integer, primary_key=True)
+
+    clan_name = Column(String)
+    clan_desc = Column(String)
+    clan_khl_server = Column(String)
+    clan_qq_group = Column(String)

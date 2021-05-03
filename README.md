@@ -6,7 +6,7 @@ generated id\*
 
 1. current round
 
-### status boss
+### boss status
 
 1. boss (list)
    1. status
@@ -49,3 +49,11 @@ mem structure
    1. khl
    2. qq
    3. ...
+
+## info
+
+1. clan
+   1. name
+   2. desc
+   3. khl server id
+   4. qq group id
