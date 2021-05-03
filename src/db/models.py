@@ -14,7 +14,7 @@ class Status(Base):
 class BossStatus(Base):
     __tablename__ = 'boss_status'
 
-    class statusCode(Enum):
+    class StatusCode(Enum):
         UNDEF = 0
         DEFEATED = 1
         ACTIVE = 2
@@ -46,7 +46,7 @@ class BattleLog(Base):
 class CurrentBattle(Base):
     __tablename__ = 'current_battle'
 
-    class statusCode(Enum):
+    class StatusCode(Enum):
         UNDEF = 0
         ENTER = 1
         WAITING = 2
@@ -62,6 +62,12 @@ class CurrentBattle(Base):
 class Member(Base):
     __tablename__ = 'member'
 
+    class Permission(Enum):
+        MEMBER = 0
+        VICE_LEADER = 1
+        LEADER = 2
+
     game_id = Column(Integer, primary_key=True)
+    permission = Column(Integer)
     contact_khl = Column(String)
     contact_qq = Column(String)
