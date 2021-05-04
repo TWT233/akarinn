@@ -67,6 +67,7 @@ class Member(Base):
         MEMBER = 0
         VICE_LEADER = 1
         LEADER = 2
+        EX_AID = 3
 
     game_id = Column(Integer, primary_key=True)
     permission = Column(Integer)
