@@ -1,4 +1,5 @@
 from enum import Enum
+
 from sqlalchemy import Column, Integer, String, Boolean, DateTime, Date
 
 from .init import Base
@@ -31,8 +32,8 @@ class BattleLog(Base):
 
     id = Column(Integer, primary_key=True)
 
-    who = Column(String)
-    executor = Column(String)
+    who = Column(Integer)
+    executor = Column(Integer)
     when_commit = Column(DateTime)
     which_day = Column(Date)
     which_round = Column(Integer)
@@ -53,7 +54,7 @@ class CurrentBattle(Base):
 
     id = Column(Integer, primary_key=True)
 
-    who = Column(String)
+    who = Column(Integer)
     when = Column(DateTime)
     status = Column(Integer)
     comment = Column(String)
@@ -73,12 +74,12 @@ class Member(Base):
     contact_qq = Column(String)
 
 
-class Info(Base):
-    __tablename__ = 'info'
+class ClanInfo(Base):
+    __tablename__ = 'clan_info'
 
     id = Column(Integer, primary_key=True)
 
-    clan_name = Column(String)
-    clan_desc = Column(String)
-    clan_khl_server = Column(String)
-    clan_qq_group = Column(String)
+    name = Column(String)
+    desc = Column(String)
+    khl_server = Column(String)
+    qq_group = Column(String)
