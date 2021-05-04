@@ -16,6 +16,10 @@ class BossStatus(BaseModel):
 
 class Status(BaseModel):
     round: int
+
+
+class StatusRet(BaseModel):
+    round: int
     detail: List[BossStatus]
 
     class Config:
@@ -45,11 +49,16 @@ class BattleLog(BattleLogBase):
         orm_mode = True
 
 
+class BattleLogRet(BaseModel):
+    log: BattleLog
+    status: StatusRet
+
+
 class Member(BaseModel):
     game_id: int
     permission: int
-    contact_qq: str
     contact_khl: str
+    contact_qq: str
 
     class Config:
         orm_mode = True
