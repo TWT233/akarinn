@@ -1,6 +1,7 @@
 import yaml
 
-battle_conf = yaml.load(open('conf/battle.yaml'), Loader=yaml.FullLoader)
+with open('conf/battle.yaml', 'r', encoding='utf-8') as f:
+    battle_conf = yaml.load(f, Loader=yaml.FullLoader)
 
 
 def conf_battle_stage() -> list:
@@ -17,7 +18,8 @@ def in_which_stage(round: int) -> dict:
             return i
 
 
-system_conf = yaml.load(open('conf/system.yaml'), Loader=yaml.FullLoader)
+with open('conf/system.yaml', 'r', encoding='utf-8') as f:
+    system_conf = yaml.load(f, Loader=yaml.FullLoader)
 
 
 def conf_system_db() -> dict:
