@@ -1,16 +1,20 @@
 from datetime import datetime, date
-from typing import Dict, List
+from typing import List
 
 from pydantic import BaseModel
 
 
-class Status(BaseModel):
-    class BossStatus(BaseModel):
-        number: int
-        status: str
-        hp: int
-        max_hp: int
+class BossStatus(BaseModel):
+    number: int
+    status: int
+    hp: int
+    max_hp: int
 
+    class Config:
+        orm_mode = True
+
+
+class Status(BaseModel):
     round: int
     detail: List[BossStatus]
 
@@ -47,12 +51,19 @@ class Member(BaseModel):
     contact_qq: str
     contact_khl: str
 
+    class Config:
+        orm_mode = True
+
+
+class InfoClan(BaseModel):
+    name: str
+    desc: str
+    khl_server: str
+    qq_group: str
+
+    class Config:
+        orm_mode = True
+
 
 class Info(BaseModel):
-    class InfoClan():
-        name: str
-        desc: str
-        khl_server: str
-        qq_group: str
-
     clan: InfoClan
