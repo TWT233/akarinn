@@ -23,7 +23,7 @@ class BossStatus(Base):
     number = Column(Integer, primary_key=True)
     status = Column(Integer)
     hp = Column(Integer)
-    maxhp = Column(Integer)
+    max_hp = Column(Integer)
 
 
 class BattleLog(Base):
