@@ -28,3 +28,7 @@ def conf_system_db() -> dict:
 
 def db_path() -> str:
     return conf_system_db()['path']
+
+
+def conf_system_mode() -> str:
+    return system_conf['system']['mode']
