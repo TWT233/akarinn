@@ -34,10 +34,7 @@ async def status_get(db: Session = Depends(get_db)):
 
 @app.get('/battle/log', response_model=List[schemas.BattleLog])
 async def battle_log_get(who: int = None, which_day: Union[datetime.date, str] = None, db=Depends(get_db)):
-    which_day = get_real_which_day(which_day)
-    if not which_day:
-        raise HTTPException(403, 'missing param: which_day')
-    return crud.battle_log.get(db, who=who, which_day=which_day)
+    return crud.battle_log.get(db, who=who, which_day=get_real_which_day(which_day))
 
 
 @app.post('/battle/log', response_model=schemas.BattleLogRet)
