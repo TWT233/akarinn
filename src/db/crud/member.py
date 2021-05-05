@@ -39,7 +39,7 @@ def add(db: Session, member: schemas.MemberAdd):
     if member.permission == models.Member.Permission.VICE_LEADER or \
             member.permission == models.Member.Permission.LEADER:
         if member.op_key != get_op_key():
-            return False, 'wrong op_key'
+            return False, {'msg': 'wrong op_key'}
 
     # set perm
     if member.permission:
