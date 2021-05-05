@@ -42,7 +42,7 @@ class BattleLogCommit(BattleLogBase):
 
 
 class BattleLog(BattleLogBase):
-    when_commit: datetime
+    when: datetime
     is_defeat_boss: bool
     real_damage: int
     is_compensation: bool

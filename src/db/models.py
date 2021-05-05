@@ -34,7 +34,7 @@ class BattleLog(Base):
 
     who = Column(Integer)
     executor = Column(Integer)
-    when_commit = Column(DateTime)
+    when = Column(DateTime)
     which_day = Column(Date)
     which_round = Column(Integer)
     which_boss = Column(Integer)

@@ -13,7 +13,7 @@ def get(db: Session,
         which_day: Optional[datetime.date] = None) -> List[models.BattleLog]:
     cond1 = models.BattleLog.who == who if who else true()
     cond2 = models.BattleLog.which_day == which_day if which_day else true()
-    return db.query(models.BattleLog).where(cond1, cond2).order_by(models.BattleLog.when_commit.desc()).all()
+    return db.query(models.BattleLog).where(cond1, cond2).order_by(models.BattleLog.when.desc()).all()
 
 
 def count(db: Session, who: Optional[int] = None, which_day: Optional[datetime.date] = None) -> float:
@@ -52,7 +52,7 @@ def commit(db: Session, co: schemas.BattleLogCommit):
 
     # filling log
     log.who = co.who
-    log.when_commit = datetime.datetime.utcnow()
+    log.when = datetime.datetime.utcnow()
     log.which_day = co.which_day
     log.which_round = co.which_round
     log.which_boss = co.which_boss
