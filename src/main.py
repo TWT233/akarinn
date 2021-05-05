@@ -1,10 +1,12 @@
-from typing import List
+import datetime
+from typing import List, Union
 
 from fastapi import FastAPI, Depends, HTTPException
 from sqlalchemy.orm import Session
 
 from .db import models, crud, schemas
 from .db.init import SessionLocal, engine
+from .utils import get_real_which_day
 
 models.Base.metadata.create_all(bind=engine)
 
@@ -30,6 +32,14 @@ async def status_get(db: Session = Depends(get_db)):
     return crud.status.get(db)
 
 
+@app.get('/battle/log', response_model=List[schemas.BattleLog])
+async def battle_log_get(who: int = None, which_day: Union[datetime.date, str] = None, db=Depends(get_db)):
+    which_day = get_real_which_day(which_day)
+    if not which_day:
+        raise HTTPException(403, 'missing param: which_day')
+    return crud.battle_log.get(db, who=who, which_day=which_day)
+
+
 @app.post('/battle/log', response_model=schemas.BattleLogRet)
 async def battle_log_post(commit: schemas.BattleLogCommit, db=Depends(get_db)):
     status, ret = crud.battle_log.commit(db, commit)
@@ -49,7 +59,7 @@ async def member_post(member: schemas.MemberAdd, db=Depends(get_db)):
     if not status:
         raise HTTPException(403, ret)
     return ret
-    # test data:
+# test data:
 # {
 # "game_id": 524871626,
 # "contact_khl": "aaaaaaaaaaa",
@@ -57,17 +67,6 @@ async def member_post(member: schemas.MemberAdd, db=Depends(get_db)):
 # "permission": 0,
 # "op_key": "b8f3d59faf4a0e70"
 # }
-
-# @app.get('/battle/log', response_model=List[schemas.BattleLog])
-# async def battle_log(response: Response,
-#                      who: Optional[str] = None,
-#                      which_day: Optional[Union[datetime.date, str]] = None,
-#                      db=Depends(get_db)):
-#     which_day = get_real_which_day(which_day)
-#     if not which_day:
-#         response.status_code = 400
-#         return {'message': 'wrong param'}
-#     return crud.get_battle_logs(db, who=who, which_day=which_day)
 
 # @app.get('/battle/log/count')
 # async def battle_log_count(response: Response,
