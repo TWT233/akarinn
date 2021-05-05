@@ -19,13 +19,13 @@ class BossStatus(BaseModel):
 class Status(BaseModel):
     round: int
 
-
-class StatusRet(BaseModel):
-    round: int
-    detail: List[BossStatus]
-
     class Config:
         orm_mode = True
+
+
+class StatusRet(BaseModel):
+    glob: Status
+    detail: List[BossStatus]
 
 
 class BattleLogBase(BaseModel):

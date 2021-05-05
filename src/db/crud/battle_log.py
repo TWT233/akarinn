@@ -26,19 +26,18 @@ def is_compensation_now(db: Session, who: int, which_day: datetime.date) -> bool
 
 
 def commit(db: Session, co: schemas.BattleLogCommit):
-    current_status = status.get_status(db)
-    current_boss_status = status.get_boss_status(db)
+    current = status.get(db)
 
     # check round and boss
-    if co.which_round != current_status.round:
-        return False, 'wrong round'
-    current_boss = current_boss_status[co.which_boss - 1]
+    if co.which_round != current.glob.round:
+        return False, {'msg': 'wrong round', 'status': current}
+    current_boss = current.detail[co.which_boss - 1]
     if current_boss.status != models.BossStatus.StatusCode.ACTIVE:
-        return False, 'wrong boss'
+        return False, {'msg': 'wrong boss', 'status': current}
 
     # check battle count
     if count(db, co.who, co.which_day) >= 3:
-        return False, 'battle count limit exceeded'
+        return False, {'msg': 'wrong boss', 'status': current}
 
     # battle log instantiation
     log = models.BattleLog()
@@ -66,9 +65,9 @@ def commit(db: Session, co: schemas.BattleLogCommit):
     if log.is_defeat_boss:
         current_boss.status = models.BossStatus.StatusCode.DEFEATED
         db.commit()
-        if not filter(lambda x: x.status != models.BossStatus.StatusCode.DEFEATED, current_boss_status):
-            current_status.round += 1
-            status.init_boss_status(db, current_status.round)
+        if not filter(lambda x: x.status != models.BossStatus.StatusCode.DEFEATED, current.detail):
+            current.glob.round += 1
+            status.init_boss_status(db, current.glob.round)
 
     # commit log
     db.add(log)

@@ -49,4 +49,4 @@ def get_boss_status(db: Session) -> List[models.BossStatus]:
 
 
 def get(db: Session) -> schemas.StatusRet:
-    return schemas.StatusRet(round=get_status(db).round, detail=get_boss_status(db))
+    return schemas.StatusRet(glob=get_status(db), detail=get_boss_status(db))
