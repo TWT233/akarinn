@@ -1,5 +1,5 @@
 from datetime import datetime, date
-from typing import List
+from typing import List, Optional
 
 from pydantic import BaseModel
 
@@ -27,12 +27,12 @@ class StatusRet(BaseModel):
 
 
 class BattleLogBase(BaseModel):
-    who: str
+    who: int
     which_day: date
     which_round: int
     which_boss: int
     damage: int
-    executor: str
+    executor: int
 
 
 class BattleLogCommit(BattleLogBase):
