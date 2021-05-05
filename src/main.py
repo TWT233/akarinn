@@ -45,6 +45,11 @@ async def battle_log_post(commit: schemas.BattleLogCommit, db=Depends(get_db)):
     return schemas.BattleLogRet(log=ret, status=crud.status.get(db))
 
 
+@app.get('/battle/log/count')
+async def battle_log_count(who: str = None, which_day: Union[datetime.date, str] = None, db=Depends(get_db)):
+    return crud.battle_log.count(db, who=who, which_day=get_real_which_day(which_day))
+
+
 @app.get('/member', response_model=List[schemas.Member])
 async def member_get(game_id: int = None, contact_khl: str = None, contact_qq: str = None, db=Depends(get_db)):
     return crud.member.get(db, game_id=game_id, contact_khl=contact_khl, contact_qq=contact_qq)
@@ -64,14 +69,3 @@ async def member_post(member: schemas.MemberAdd, db=Depends(get_db)):
 # "permission": 0,
 # "op_key": "b8f3d59faf4a0e70"
 # }
-
-# @app.get('/battle/log/count')
-# async def battle_log_count(response: Response,
-#                            who: Optional[str] = None,
-#                            which_day: Optional[Union[datetime.date, str]] = None,
-#                            db=Depends(get_db)):
-#     which_day = get_real_which_day(which_day)
-#     if not which_day:
-#         response.status_code = 400
-#         return {'message': 'wrong param'}
-#     return crud.count_battles(db, who=who, which_day=which_day)
