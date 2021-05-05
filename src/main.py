@@ -39,8 +39,8 @@ async def battle_log_post(commit: schemas.BattleLogCommit, db=Depends(get_db)):
 
 
 @app.get('/member', response_model=List[schemas.Member])
-async def member_get(db=Depends(get_db)):
-    return crud.member.get(db)
+async def member_get(game_id: int = None, contact_khl: str = None, contact_qq: str = None, db=Depends(get_db)):
+    return crud.member.get(db, game_id=game_id, contact_khl=contact_khl, contact_qq=contact_qq)
 
 
 @app.post('/member', response_model=schemas.Member)
