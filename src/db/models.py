@@ -1,6 +1,6 @@
-from enum import Enum
+import enum
 
-from sqlalchemy import Column, Integer, String, Boolean, DateTime, Date
+from sqlalchemy import Column, Integer, String, Boolean, DateTime, Date, Enum
 
 from .init import Base
 
@@ -15,14 +15,14 @@ class Status(Base):
 class BossStatus(Base):
     __tablename__ = 'boss_status'
 
-    class StatusCode(Enum):
-        UNDEF = 0
-        DEFEATED = 1
-        ACTIVE = 2
-        WATING = 3
+    class StatusCode(enum.Enum):
+        UNDEF = 'undef'
+        DEFEATED = 'defeated'
+        ACTIVE = 'active'
+        WAITING = 'waiting'
 
     number = Column(Integer, primary_key=True)
-    status = Column(Integer)
+    status = Column(Enum(StatusCode))
     hp = Column(Integer)
     max_hp = Column(Integer)
 
@@ -47,30 +47,30 @@ class BattleLog(Base):
 class CurrentBattle(Base):
     __tablename__ = 'current_battle'
 
-    class StatusCode(Enum):
-        UNDEF = 0
-        ENTER = 1
-        WAITING = 2
+    class StatusCode(enum.Enum):
+        UNDEF = 'undef'
+        ENTER = 'enter'
+        WAITING = 'waiting'
 
     id = Column(Integer, primary_key=True)
 
     who = Column(Integer)
     when = Column(DateTime)
-    status = Column(Integer)
+    status = Column(Enum(StatusCode))
     comment = Column(String)
 
 
 class Member(Base):
     __tablename__ = 'member'
 
-    class Permission(Enum):
-        MEMBER = 0
-        VICE_LEADER = 1
-        LEADER = 2
-        EX_AID = 3
+    class Permission(enum.Enum):
+        MEMBER = 'member'
+        VICE_LEADER = 'vice_leader'
+        LEADER = 'leader'
+        EX_AID = 'ex_aid'
 
     game_id = Column(Integer, primary_key=True)
-    permission = Column(Integer)
+    permission = Column(Enum(Permission))
     contact_khl = Column(String)
     contact_qq = Column(String)
 

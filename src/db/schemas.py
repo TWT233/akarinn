@@ -3,10 +3,12 @@ from typing import List, Optional
 
 from pydantic import BaseModel
 
+from src.db import models
+
 
 class BossStatus(BaseModel):
     number: int
-    status: int
+    status: models.BossStatus.StatusCode
     hp: int
     max_hp: int
 
@@ -61,14 +63,14 @@ class MemberBase(BaseModel):
 
 
 class Member(MemberBase):
-    permission: int
+    permission: models.Member.Permission
 
     class Config:
         orm_mode = True
 
 
 class MemberAdd(MemberBase):
-    permission: Optional[int]
+    permission: Optional[models.Member.Permission]
     op_key: Optional[str]
 
 
