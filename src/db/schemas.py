@@ -54,14 +54,22 @@ class BattleLogRet(BaseModel):
     status: StatusRet
 
 
-class Member(BaseModel):
+class MemberBase(BaseModel):
     game_id: int
+    contact_khl: Optional[str]
+    contact_qq: Optional[str]
+
+
+class Member(MemberBase):
     permission: int
-    contact_khl: str
-    contact_qq: str
 
     class Config:
         orm_mode = True
+
+
+class MemberAdd(MemberBase):
+    permission: Optional[int]
+    op_key: Optional[str]
 
 
 class InfoClan(BaseModel):
