@@ -53,7 +53,7 @@ class BattleLog(Base):
 class CurrentBattle(Base):
     __tablename__ = 'current_battle'
 
-    class StatusCode(enum.Enum):
+    class Types(enum.Enum):
         UNDEF = 'undef'
         ENTER = 'enter'
         WAITING = 'waiting'
@@ -61,8 +61,10 @@ class CurrentBattle(Base):
     id = Column(Integer, primary_key=True)
 
     who = Column(Integer)
+    executor = Column(Integer)
     when = Column(DateTime)
-    status = Column(Enum(StatusCode))
+    which_boss = Column(Integer)
+    type = Column(Enum(Types))
     comment = Column(String)
 
 

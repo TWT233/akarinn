@@ -57,6 +57,29 @@ class BattleLogRet(BaseModel):
     status: StatusRet
 
 
+class CurrentBattleBase(BaseModel):
+    who: int
+    executor: int
+    which_boss: int
+    type: models.CurrentBattle.Types
+    comment: Optional[str]
+
+    class Config:
+        orm_mode = True
+
+
+class CurrentBattleCommit(CurrentBattleBase):
+    pass
+
+
+class CurrentBattle(CurrentBattleBase):
+    when: datetime
+
+
+class CurrentBattleRet(BaseModel):
+    log: CurrentBattle
+
+
 class MemberBase(BaseModel):
     game_id: int
     contact_khl: Optional[str]

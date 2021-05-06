@@ -5,7 +5,7 @@ from sqlalchemy import true
 from sqlalchemy.orm import Session
 
 from src.db import schemas, models
-from . import status
+from . import status, current_battle
 
 
 def get(db: Session,
@@ -39,14 +39,17 @@ def commit(db: Session, co: schemas.BattleLogCommit):
             return False, {'msg': 'sl has been used', 'status': current}
         log = models.BattleLog(who=co.who, when=datetime.datetime.utcnow(), which_day=co.which_day,
                                executor=co.executor, type=models.BattleLog.Types.SL)
+        # commit log
         db.add(log)
         db.commit()
+        # clean current battle
+        current_battle.delete(db, log.who, log.which_boss)
         return True, {'log': log, 'status': current}
 
     # check round and boss
-    if co.which_round != current.glob.round:
+    if co.which_round != current['glob'].round:
         return False, {'msg': 'wrong round', 'status': current}
-    current_boss = current.detail[co.which_boss - 1]
+    current_boss = current['detail'][co.which_boss - 1]
     if current_boss.status != models.BossStatus.StatusCode.ACTIVE:
         return False, {'msg': 'wrong boss', 'status': current}
 
@@ -81,11 +84,15 @@ def commit(db: Session, co: schemas.BattleLogCommit):
     if log.is_defeat_boss:
         current_boss.status = models.BossStatus.StatusCode.DEFEATED
         db.commit()
-        if not filter(lambda x: x.status != models.BossStatus.StatusCode.DEFEATED, current.detail):
-            current.glob.round += 1
-            status.init_boss_status(db, current.glob.round)
+        # clean current battle
+        current_battle.delete(db, which_boss=log.which_boss)
+        if not filter(lambda x: x.status != models.BossStatus.StatusCode.DEFEATED, current['detail']):
+            current['glob'].round += 1
+            status.init_boss_status(db, current['glob'].round)
 
     # commit log
     db.add(log)
     db.commit()
+    # clean current battle
+    current_battle.delete(db, log.who, log.which_boss)
     return True, {'log': log, 'status': current}
