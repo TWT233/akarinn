@@ -46,7 +46,7 @@ async def battle_log_post(commit: schemas.BattleLogCommit, db=Depends(get_db)):
     return ret
 
 
-@app.get('/battle/log/count')
+@app.get('/battle/log/count', response_model=int)
 async def battle_log_count(who: str = None, which_day: Union[datetime.date, str] = None, db=Depends(get_db)):
     return crud.battle_log.count(db, who=who, which_day=get_real_which_day(which_day))
 
