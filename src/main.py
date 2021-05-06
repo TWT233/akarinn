@@ -2,6 +2,7 @@ import datetime
 from typing import List, Union
 
 from fastapi import FastAPI, Depends, HTTPException
+from fastapi.encoders import jsonable_encoder
 from sqlalchemy.orm import Session
 
 from .db import models, crud, schemas
@@ -41,8 +42,8 @@ async def battle_log_get(who: int = None, which_day: Union[datetime.date, str] =
 async def battle_log_post(commit: schemas.BattleLogCommit, db=Depends(get_db)):
     status, ret = crud.battle_log.commit(db, commit)
     if not status:
-        raise HTTPException(403, ret)
-    return schemas.BattleLogRet(log=ret, status=crud.status.get(db))
+        raise HTTPException(403, jsonable_encoder(ret))
+    return ret
 
 
 @app.get('/battle/log/count')
@@ -59,7 +60,7 @@ async def member_get(game_id: int = None, contact_khl: str = None, contact_qq: s
 async def member_post(member: schemas.MemberAdd, db=Depends(get_db)):
     status, ret = crud.member.add(db, member)
     if not status:
-        raise HTTPException(403, ret)
+        raise HTTPException(403, jsonable_encoder(ret))
     return ret
 # test data:
 # {
