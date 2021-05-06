@@ -46,8 +46,8 @@ class BattleLog(Base):
     which_boss = Column(Integer)
     damage = Column(Integer)
     is_defeat_boss = Column(Boolean)
-    type = Column(Enum(Types))
     real_damage = Column(Integer)
+    type = Column(Enum(Types))
 
 
 class CurrentBattle(Base):
