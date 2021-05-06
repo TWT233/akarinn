@@ -51,6 +51,20 @@ async def battle_log_count(who: str = None, which_day: Union[datetime.date, str]
     return crud.battle_log.count(db, who=who, which_day=get_real_which_day(which_day))
 
 
+@app.get('/battle/current', response_model=List[schemas.CurrentBattle])
+async def battle_current_get(who: str = None, which_boss: int = None, type: models.CurrentBattle.Types = None,
+                             db=Depends(get_db)):
+    return crud.current_battle.get(db, who, which_boss, [type == models.CurrentBattle.type] if type else ())
+
+
+@app.post('/battle/current', response_model=schemas.CurrentBattleRet)
+async def battle_current_post(commit: schemas.CurrentBattleCommit, db=Depends(get_db)):
+    status, ret = crud.current_battle.commit(db, commit)
+    if not status:
+        raise HTTPException(403, jsonable_encoder(ret))
+    return ret
+
+
 @app.get('/member', response_model=List[schemas.Member])
 async def member_get(game_id: int = None, contact_khl: str = None, contact_qq: str = None, db=Depends(get_db)):
     return crud.member.get(db, game_id=game_id, contact_khl=contact_khl, contact_qq=contact_qq)
@@ -62,11 +76,3 @@ async def member_post(member: schemas.MemberAdd, db=Depends(get_db)):
     if not status:
         raise HTTPException(403, jsonable_encoder(ret))
     return ret
-# test data:
-# {
-# "game_id": 524871626,
-# "contact_khl": "aaaaaaaaaaa",
-# "contact_qq": "549218202",
-# "permission": 0,
-# "op_key": "b8f3d59faf4a0e70"
-# }
