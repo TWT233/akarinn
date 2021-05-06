@@ -30,6 +30,12 @@ class BossStatus(Base):
 class BattleLog(Base):
     __tablename__ = 'battle_log'
 
+    class Types(enum.Enum):
+        UNDEF = 'undef'
+        NORMAL = 'normal'
+        SL = 'sl'
+        COMP = 'compensation'
+
     id = Column(Integer, primary_key=True)
 
     who = Column(Integer)
@@ -40,7 +46,7 @@ class BattleLog(Base):
     which_boss = Column(Integer)
     damage = Column(Integer)
     is_defeat_boss = Column(Boolean)
-    is_compensation = Column(Boolean)
+    type = Column(Enum(Types))
     real_damage = Column(Integer)
 
 

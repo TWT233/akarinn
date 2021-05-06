@@ -10,23 +10,38 @@ from . import status
 
 def get(db: Session,
         who: Optional[int] = None,
-        which_day: Optional[datetime.date] = None) -> List[models.BattleLog]:
+        which_day: Optional[datetime.date] = None,
+        conds: list = ()) -> List[models.BattleLog]:
     cond1 = models.BattleLog.who == who if who else true()
     cond2 = models.BattleLog.which_day == which_day if which_day else true()
-    return db.query(models.BattleLog).where(cond1, cond2).order_by(models.BattleLog.when.desc()).all()
+    return db.query(models.BattleLog).where(cond1, cond2, *conds).order_by(models.BattleLog.when.desc()).all()
 
 
 def count(db: Session, who: Optional[int] = None, which_day: Optional[datetime.date] = None) -> float:
-    logs = get(db, who=who, which_day=which_day)
-    return float(sum(map(lambda i: 0.5 if (i.is_compensation or i.is_defeat_boss) else 1.0, logs)))
+    logs = get(db, who, which_day, [models.BattleLog.type != models.BattleLog.Types.SL])
+    return float(sum(map(lambda x: 0.5 if x.type == models.BattleLog.Types.COMP or x.is_defeat_boss else 1.0, logs)))
 
 
 def is_compensation_now(db: Session, who: int, which_day: datetime.date) -> bool:
     return not count(db, who, which_day).is_integer()
 
 
+def is_sled(db: Session, who: int, which_day: datetime.date) -> bool:
+    return len(get(db, who, which_day, [models.BattleLog.type == models.BattleLog.Types.SL])) > 0
+
+
 def commit(db: Session, co: schemas.BattleLogCommit):
     current = status.get(db)
+
+    # check sl
+    if co.sl:
+        if is_sled(db, co.who, co.which_day):
+            return False, {'msg': 'sl has been used', 'status': current}
+        log = models.BattleLog(who=co.who, when=datetime.datetime.utcnow(), which_day=co.which_day,
+                               executor=co.executor, type=models.BattleLog.Types.SL)
+        db.add(log)
+        db.commit()
+        return True, {'log': log, 'status': current}
 
     # check round and boss
     if co.which_round != current.glob.round:
@@ -57,7 +72,8 @@ def commit(db: Session, co: schemas.BattleLogCommit):
     log.which_round = co.which_round
     log.which_boss = co.which_boss
     log.damage = co.damage
-    log.is_compensation = is_compensation_now(db, co.who, co.which_day)
+    log.type = models.BattleLog.Types.COMP if is_compensation_now(db, co.who,
+                                                                  co.which_day) else models.BattleLog.Types.NORMAL
     log.executor = co.executor
 
     # modify status
@@ -72,4 +88,4 @@ def commit(db: Session, co: schemas.BattleLogCommit):
     # commit log
     db.add(log)
     db.commit()
-    return True, log
+    return True, {'log': log, 'status': current}

@@ -31,21 +31,22 @@ class StatusRet(BaseModel):
 class BattleLogBase(BaseModel):
     who: int
     which_day: date
-    which_round: int
-    which_boss: int
-    damage: int
+    which_round: Optional[int]
+    which_boss: Optional[int]
+    damage: Optional[int]
     executor: int
 
 
 class BattleLogCommit(BattleLogBase):
+    sl: Optional[bool]
     pass
 
 
 class BattleLog(BattleLogBase):
     when: datetime
-    is_defeat_boss: bool
-    real_damage: int
-    is_compensation: bool
+    is_defeat_boss: Optional[bool]
+    real_damage: Optional[int]
+    type: models.BattleLog.Types
 
     class Config:
         orm_mode = True
