@@ -3,7 +3,7 @@ from typing import List
 from sqlalchemy.orm import Session
 
 from src.config import *
-from src.db import models, schemas
+from src.db import models
 
 
 def init_status(db: Session):
@@ -48,5 +48,5 @@ def get_boss_status(db: Session) -> List[models.BossStatus]:
     return dbr
 
 
-def get(db: Session) -> schemas.StatusRet:
-    return schemas.StatusRet(glob=get_status(db), detail=get_boss_status(db))
+def get(db: Session):
+    return {'glob': get_status(db), 'detail': get_boss_status(db)}

@@ -30,7 +30,7 @@ def get_db():
 
 @app.get('/status', response_model=schemas.StatusRet)
 async def status_get(db: Session = Depends(get_db)):
-    return crud.status.get(db)
+    return schemas.StatusRet(**crud.status.get(db))
 
 
 @app.get('/battle/log', response_model=List[schemas.BattleLog])
