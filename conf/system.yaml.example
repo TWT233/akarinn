@@ -1,0 +1,16 @@
+# 系统配置
+# 使用前请先把该文件重命名为"system.yaml"
+
+db:
+#   path: 'sqlite:///./db/data.db'
+   path: "sqlite+pysqlite:///:memory:"
+
+mode: new
+#   new: 五个boss同时可被挑战
+#   legacy: 只能按顺序打
+
+op_key: b8f3d59faf4a0e70
+#   执行一些高权限操作需要的key，注释掉该设置则会在每次启动时自动生成key
+#   自动生成的key仅会在控制台打印一次，注意保存
+
+timezone: 8 # check your system settings
