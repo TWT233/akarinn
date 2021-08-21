@@ -1,3 +1,10 @@
+# usage
+
+```shell
+pip install -r requirements.txt
+python -m uvicorn src.main:app --reload
+```
+
 # design
 
 ## status
